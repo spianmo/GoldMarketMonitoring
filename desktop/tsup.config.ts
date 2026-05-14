@@ -1,5 +1,7 @@
 import { defineConfig } from 'tsup';
 
+const sharedInline = ['@goldmarket/shared'];
+
 export default defineConfig([
   {
     entry: { index: 'electron/main/index.ts' },
@@ -12,6 +14,7 @@ export default defineConfig([
     splitting: false,
     shims: false,
     external: ['electron'],
+    noExternal: sharedInline,
   },
   {
     entry: { index: 'electron/preload/index.ts' },
@@ -24,5 +27,6 @@ export default defineConfig([
     splitting: false,
     shims: false,
     external: ['electron'],
+    noExternal: sharedInline,
   },
 ]);
