@@ -3,6 +3,9 @@ dist
 dist-electron
 out
 release
+.expo
+.expo-shared
+web-build
 .DS_Store
 *.log
 .env
