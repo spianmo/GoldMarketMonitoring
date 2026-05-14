@@ -1,0 +1,31 @@
+appId: com.teamhelper.goldmarketmonitoring
+productName: 黄金盯盘
+directories:
+  output: release
+  buildResources: build
+files:
+  - dist/**/*
+  - package.json
+  - "!**/*.map"
+asar: true
+mac:
+  category: public.app-category.finance
+  target:
+    - target: dmg
+      arch:
+        - arm64
+        - x64
+  icon: build/icon.icns
+dmg:
+  artifactName: ${productName}-${version}-${arch}.dmg
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  icon: build/icon.ico
+linux:
+  target:
+    - target: AppImage
+      arch:
+        - x64

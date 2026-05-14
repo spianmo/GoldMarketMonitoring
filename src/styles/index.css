@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+    margin: 0;
+    background-color: #faf8f3;
+    color: #1f2937;
+    font-family:
+      -apple-system,
+      BlinkMacSystemFont,
+      'PingFang SC',
+      'Hiragino Sans GB',
+      'Microsoft YaHei',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(15, 23, 42, 0.15);
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-xl shadow-card p-5;
+  }
+  .card-lg {
+    @apply bg-white rounded-2xl shadow-soft p-6;
+  }
+  .btn-primary {
+    @apply inline-flex items-center gap-1.5 rounded-lg border border-gold-500 px-3 py-1.5 text-sm text-gold-700 hover:bg-gold-100 transition;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-sm text-ink-500 hover:bg-ink-100 transition;
+  }
+  .tab-pill {
+    @apply px-2.5 py-1 rounded-md text-xs font-medium text-ink-500 hover:bg-ink-100 cursor-pointer transition;
+  }
+  .tab-pill.active {
+    @apply bg-gold-100 text-gold-700;
+  }
+}

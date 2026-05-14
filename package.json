@@ -1,0 +1,55 @@
+{
+  "name": "gold-market-monitoring",
+  "version": "1.0.0",
+  "private": true,
+  "description": "黄金盯盘程序 - 实时监控浙商银行公开金价并在条件触发时通过系统通知提醒",
+  "main": "dist/main/index.js",
+  "scripts": {
+    "dev": "concurrently -k -n rsbuild,tsup,electron -c cyan,magenta,yellow \"pnpm dev:renderer\" \"pnpm dev:electron\" \"pnpm dev:start\"",
+    "dev:renderer": "rsbuild dev",
+    "dev:electron": "tsup --watch",
+    "dev:start": "wait-on tcp:5173 dist/main/index.js dist/preload/index.js && cross-env NODE_ENV=development RSBUILD_DEV_URL=http://localhost:5173 electron .",
+    "build:renderer": "rsbuild build",
+    "build:electron": "tsup",
+    "build": "pnpm build:renderer && pnpm build:electron",
+    "package": "pnpm build && electron-builder --mac --x64 --arm64",
+    "package:dir": "pnpm build && electron-builder --dir",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "dexie": "^4.0.10",
+    "iconv-lite": "^0.6.3"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "core-js",
+      "electron",
+      "esbuild"
+    ]
+  },
+  "devDependencies": {
+    "@rsbuild/core": "^1.1.10",
+    "@rsbuild/plugin-react": "^1.0.7",
+    "@types/d3": "^7.4.3",
+    "@types/node": "^22.10.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "autoprefixer": "^10.4.20",
+    "concurrently": "^9.1.0",
+    "cross-env": "^7.0.3",
+    "d3": "^7.9.0",
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8",
+    "lucide-react": "^0.460.0",
+    "postcss": "^8.4.49",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.0",
+    "tailwindcss": "^3.4.15",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "wait-on": "^8.0.1",
+    "zustand": "^5.0.1"
+  }
+}
