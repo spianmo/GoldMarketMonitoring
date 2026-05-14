@@ -1,5 +1,5 @@
 import { Text, View } from 'react-native';
-import { CheckCircle2 } from 'lucide-react-native';
+import { Feather } from '@expo/vector-icons';
 import { colors } from '@/theme/colors';
 
 export default function StorageBadge() {
@@ -13,7 +13,7 @@ export default function StorageBadge() {
         paddingVertical: 6,
       }}
     >
-      <CheckCircle2 size={14} color={colors.green} strokeWidth={1.8} />
+      <Feather name="check-circle" size={14} color={colors.green} />
       <Text style={{ fontSize: 12, color: colors.ink500 }}>数据已自动保存到 MMKV</Text>
     </View>
   );

@@ -68,7 +68,7 @@ export default function PriceChartCard() {
   };
 
   const chart = useMemo(() => {
-    const margin = { top: 12, right: 56, bottom: 26, left: 36 };
+    const margin = { top: 12, right: 56, bottom: 26, left: 64 };
     const innerW = Math.max(20, size.w - margin.left - margin.right);
     const innerH = Math.max(40, size.h - margin.top - margin.bottom);
     const now = Date.now();
@@ -205,7 +205,6 @@ export default function PriceChartCard() {
                     fill="#fff"
                     fontSize={11}
                     textAnchor="middle"
-                    fontFamily="Menlo"
                   >
                     {chart.last.v.toFixed(2)}
                   </SvgText>
@@ -220,9 +219,8 @@ export default function PriceChartCard() {
                 fontSize={10}
                 fill="#9CA3AF"
                 textAnchor="end"
-                fontFamily="Menlo"
               >
-                {t.toFixed(2)}
+                {t.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </SvgText>
             ))}
             {chart.xTicks.map((t, i) => (

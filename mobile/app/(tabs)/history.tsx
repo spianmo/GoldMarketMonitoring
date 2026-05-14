@@ -58,7 +58,7 @@ export default function HistoryScreen() {
                 <Text
                   style={{
                     fontSize: 13,
-                    fontFamily: 'Menlo',
+                    fontVariant: ['tabular-nums'],
                     color: colors.green,
                     fontWeight: '600',
                   }}

@@ -13,7 +13,8 @@ export default function PriceCard() {
   const price = tick?.price ?? null;
   const base = dayOpen;
   const delta = price != null && base != null ? price - base : null;
-  const pct = price != null && base != null && base !== 0 ? ((price - base) / base) * 100 : null;
+  const pct =
+    price != null && base != null && base !== 0 ? ((price - base) / base) * 100 : null;
   const isUp = (delta ?? 0) >= 0;
   const deltaColor = (delta ?? 0) === 0 ? colors.ink500 : isUp ? colors.green : colors.red;
 
@@ -30,53 +31,72 @@ export default function PriceCard() {
         elevation: 1,
       }}
     >
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-        <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 6 }}>
-          <Text style={{ fontSize: 16, fontWeight: '600', color: colors.ink900 }}>浙商金价</Text>
-          <Text style={{ fontSize: 12, color: colors.ink500 }}>(¥/克)</Text>
-        </View>
-        <View
-          style={{
-            backgroundColor: colors.gold100,
-            paddingHorizontal: 8,
-            paddingVertical: 3,
-            borderRadius: 6,
-          }}
-        >
-          <Text style={{ fontSize: 11, color: colors.gold700, fontWeight: '500' }}>
-            {tick ? '实时' : '等待'}
-          </Text>
-        </View>
-      </View>
+      <View style={{ flexDirection: 'row' }}>
+        {/* Left column: title / price / delta */}
+        <View style={{ flex: 1.25, paddingRight: 8, justifyContent: 'space-between' }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap' }}>
+            <Text style={{ fontSize: 15, fontWeight: '600', color: colors.ink900 }}>
+              浙商金价
+            </Text>
+            <Text style={{ fontSize: 12, color: colors.ink500, marginLeft: 3 }}>(¥/克)</Text>
+            <View
+              style={{
+                marginLeft: 8,
+                backgroundColor: colors.gold100,
+                paddingHorizontal: 8,
+                paddingVertical: 2,
+                borderRadius: 6,
+              }}
+            >
+              <Text style={{ fontSize: 11, color: colors.gold700, fontWeight: '500' }}>
+                {tick ? '实时' : '等待'}
+              </Text>
+            </View>
+          </View>
 
-      <View style={{ flexDirection: 'row', marginTop: 8 }}>
-        <View style={{ flex: 1.2 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
+          <View style={{ marginTop: 6, flexDirection: 'row', alignItems: 'baseline' }}>
             <Text
               style={{
-                fontSize: 36,
+                fontSize: 32,
                 fontWeight: '600',
                 color: colors.gold600,
-                letterSpacing: -0.5,
-                fontFamily: 'Menlo',
+                letterSpacing: -0.4,
+                lineHeight: 36,
+                fontVariant: ['tabular-nums'],
               }}
+              numberOfLines={1}
+              adjustsFontSizeToFit
             >
               {price != null ? formatPrice(price) : '—.—'}
             </Text>
             <Text style={{ fontSize: 12, color: colors.ink500, marginLeft: 6 }}>元/克</Text>
           </View>
-          <Text style={{ fontSize: 14, color: deltaColor, fontWeight: '500', marginTop: 4, fontFamily: 'Menlo' }}>
-            {delta != null ? `${isUp && delta > 0 ? '+' : ''}${delta.toFixed(2)}` : '—'}
-            {pct != null ? `  ${isUp && pct > 0 ? '+' : ''}${pct.toFixed(2)}%` : ''}
+
+          <Text
+            style={{
+              fontSize: 14,
+              color: deltaColor,
+              fontWeight: '500',
+              fontVariant: ['tabular-nums'],
+              marginTop: 6,
+            }}
+            numberOfLines={1}
+          >
+            {delta != null
+              ? `${isUp && delta > 0 ? '+' : ''}${delta.toFixed(2)}${
+                  pct != null ? `  ${isUp && pct > 0 ? '+' : ''}${pct.toFixed(2)}%` : ''
+                }`
+              : '—'}
           </Text>
         </View>
 
-        <View style={{ flex: 1 }}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
+        {/* Right column: 2x2 stats grid aligned to left/right rows */}
+        <View style={{ flex: 1, justifyContent: 'space-between', paddingTop: 2 }}>
+          <View style={{ flexDirection: 'row' }}>
             <Stat label="今日最高" value={todayHigh} />
             <Stat label="今日最低" value={todayLow} />
           </View>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={{ flexDirection: 'row', marginTop: 4 }}>
             <Stat label="开盘" value={dayOpen} />
             <Stat label="昨收" value={yClose} />
           </View>
@@ -88,10 +108,23 @@ export default function PriceCard() {
 
 function Stat({ label, value }: { label: string; value: number | null }) {
   return (
-    <View>
-      <Text style={{ fontSize: 11, color: colors.ink500, marginBottom: 2 }}>{label}</Text>
-      <Text style={{ fontSize: 13, fontWeight: '500', color: colors.ink900, fontFamily: 'Menlo' }}>
-        {value != null ? value.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '—'}
+    <View style={{ flex: 1 }}>
+      <Text style={{ fontSize: 11, color: colors.ink500, marginBottom: 3 }}>{label}</Text>
+      <Text
+        style={{
+          fontSize: 14,
+          fontWeight: '500',
+          color: colors.ink900,
+          fontVariant: ['tabular-nums'],
+        }}
+        numberOfLines={1}
+      >
+        {value != null
+          ? value.toLocaleString('zh-CN', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })
+          : '—'}
       </Text>
     </View>
   );

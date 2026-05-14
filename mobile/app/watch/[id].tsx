@@ -152,7 +152,7 @@ export default function WatchEditScreen() {
               keyboardType="numeric"
               placeholder={operator === 'pctChangeGte' || operator === 'pctChangeLte' ? '例如 0.8' : '例如 1050'}
               placeholderTextColor={colors.ink500}
-              style={[styles.input, { fontFamily: 'Menlo', paddingRight: 36 }]}
+              style={[styles.input, { fontVariant: ['tabular-nums'], paddingRight: 36 }]}
             />
             <Text style={{ position: 'absolute', right: 12, top: 12, color: colors.ink500, fontSize: 12 }}>
               {UNIT[operator]}

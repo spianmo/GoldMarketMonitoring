@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { Bell, Plus } from 'lucide-react-native';
+import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useAppStore } from '@/store/useAppStore';
 import { colors } from '@/theme/colors';
@@ -62,10 +62,25 @@ export default function HeaderBar() {
       </View>
       <View style={{ flexDirection: 'row', gap: 8 }}>
         <RoundButton onPress={() => router.push('/(tabs)/history')}>
-          <Bell size={18} color={colors.ink700} strokeWidth={1.8} />
+          <View>
+            <Feather name="bell" size={18} color={colors.ink700} />
+            <View
+              style={{
+                position: 'absolute',
+                top: -1,
+                right: -1,
+                width: 7,
+                height: 7,
+                borderRadius: 4,
+                backgroundColor: colors.red,
+                borderWidth: 1,
+                borderColor: colors.card,
+              }}
+            />
+          </View>
         </RoundButton>
         <RoundButton onPress={() => router.push({ pathname: '/watch/[id]', params: { id: 'new' } })}>
-          <Plus size={20} color={colors.ink700} strokeWidth={2} />
+          <Feather name="plus" size={20} color={colors.ink700} />
         </RoundButton>
       </View>
     </View>

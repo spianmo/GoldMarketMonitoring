@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Modal, Pressable, Switch, Text, TouchableOpacity, View } from 'react-native';
-import { ChevronRight, Settings as SettingsIcon, Check } from 'lucide-react-native';
+import { Modal, Pressable, Text, TouchableOpacity, View } from 'react-native';
+import ToggleSwitch from './ToggleSwitch';
+import { Feather } from '@expo/vector-icons';
 import { useAppStore } from '@/store/useAppStore';
 import { colors } from '@/theme/colors';
 import { setSettings as persistSettings } from '@/services/storage';
@@ -38,7 +39,7 @@ export default function SettingsCard() {
       }}
     >
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 14 }}>
-        <SettingsIcon size={18} color={colors.ink700} strokeWidth={1.8} />
+        <Feather name="settings" size={18} color={colors.ink700} />
         <Text style={{ fontSize: 16, fontWeight: '600', color: colors.ink900 }}>盯盘设置</Text>
       </View>
 
@@ -55,7 +56,7 @@ export default function SettingsCard() {
         <Text style={{ fontSize: 14, color: colors.ink900 }}>盯盘频率</Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
           <Text style={{ fontSize: 14, color: colors.ink700 }}>{intervalLabel}</Text>
-          <ChevronRight size={16} color={colors.ink500} strokeWidth={1.8} />
+          <Feather name="chevron-right" size={16} color={colors.ink500} />
         </View>
       </TouchableOpacity>
 
@@ -74,11 +75,9 @@ export default function SettingsCard() {
             条件触发时显示系统通知
           </Text>
         </View>
-        <Switch
+        <ToggleSwitch
           value={settings.notificationEnabled}
           onValueChange={(v) => update({ notificationEnabled: v })}
-          trackColor={{ true: colors.gold500, false: colors.ink300 }}
-          thumbColor={colors.white}
         />
       </View>
 
@@ -146,7 +145,7 @@ export default function SettingsCard() {
                   >
                     {opt.label}
                   </Text>
-                  {active && <Check size={16} color={colors.gold600} strokeWidth={2.5} />}
+                  {active && <Feather name="check" size={16} color={colors.gold600} />}
                 </TouchableOpacity>
               );
             })}

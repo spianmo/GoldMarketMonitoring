@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { Activity, Bell, Clock, Settings as SettingsIcon } from 'lucide-react-native';
+import { Feather } from '@expo/vector-icons';
 import { colors } from '@/theme/colors';
 
 export default function TabsLayout() {
@@ -26,28 +26,36 @@ export default function TabsLayout() {
         name="index"
         options={{
           title: '监控',
-          tabBarIcon: ({ color, size }) => <Activity color={color} size={size} />,
+          tabBarIcon: ({ color, size }) => (
+            <Feather name="activity" color={color} size={size} />
+          ),
         }}
       />
       <Tabs.Screen
         name="watches"
         options={{
           title: '条目',
-          tabBarIcon: ({ color, size }) => <Bell color={color} size={size} />,
+          tabBarIcon: ({ color, size }) => (
+            <Feather name="list" color={color} size={size} />
+          ),
         }}
       />
       <Tabs.Screen
         name="history"
         options={{
           title: '历史',
-          tabBarIcon: ({ color, size }) => <Clock color={color} size={size} />,
+          tabBarIcon: ({ color, size }) => (
+            <Feather name="clock" color={color} size={size} />
+          ),
         }}
       />
       <Tabs.Screen
         name="settings"
         options={{
           title: '设置',
-          tabBarIcon: ({ color, size }) => <SettingsIcon color={color} size={size} />,
+          tabBarIcon: ({ color, size }) => (
+            <Feather name="settings" color={color} size={size} />
+          ),
         }}
       />
     </Tabs>

@@ -1,4 +1,5 @@
-import { Alert, ScrollView, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import ToggleSwitch from '@/components/ToggleSwitch';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '@/theme/colors';
 import { useAppStore } from '@/store/useAppStore';
@@ -57,7 +58,7 @@ export default function SettingsScreen() {
                 backgroundColor: colors.gold50,
                 borderWidth: 1,
                 borderColor: colors.gold200,
-                fontFamily: 'Menlo',
+                fontVariant: ['tabular-nums'],
                 fontSize: 14,
                 color: colors.ink900,
                 textAlign: 'right',
@@ -66,20 +67,16 @@ export default function SettingsScreen() {
           </Row>
 
           <Row label="系统通知" hint="条件触发时显示本地通知">
-            <Switch
+            <ToggleSwitch
               value={settings.notificationEnabled}
               onValueChange={(v) => update({ notificationEnabled: v })}
-              trackColor={{ true: colors.gold500, false: colors.ink300 }}
-              thumbColor={colors.white}
             />
           </Row>
 
           <Row label="通知声音" hint="通知伴随提示音">
-            <Switch
+            <ToggleSwitch
               value={settings.notificationSound}
               onValueChange={(v) => update({ notificationSound: v })}
-              trackColor={{ true: colors.gold500, false: colors.ink300 }}
-              thumbColor={colors.white}
             />
           </Row>
         </View>

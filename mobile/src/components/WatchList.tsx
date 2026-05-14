@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Alert, Text, TouchableOpacity, View } from 'react-native';
-import { Bell, ChevronRight, Plus, Trash2 } from 'lucide-react-native';
+import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useAppStore } from '@/store/useAppStore';
 import { colors } from '@/theme/colors';
@@ -64,7 +64,7 @@ export default function WatchList({ expandedManager }: Props) {
                 gap: 3,
               }}
             >
-              <Plus size={14} color={colors.gold700} />
+              <Feather name="plus" size={14} color={colors.gold700} />
               <Text style={{ color: colors.gold700, fontSize: 12 }}>新增</Text>
             </TouchableOpacity>
           )}
@@ -91,7 +91,7 @@ export default function WatchList({ expandedManager }: Props) {
               marginBottom: 10,
             }}
           >
-            <Plus size={20} color={colors.gold600} strokeWidth={2} />
+            <Feather name="plus" size={20} color={colors.gold600} />
           </View>
           <Text style={{ color: colors.ink500, fontSize: 13 }}>暂无监视条目,点击新增</Text>
         </TouchableOpacity>
@@ -152,13 +152,13 @@ function WatchRow({ item, currentPrice, dayOpen, editing, onPress, onDelete }: R
         style={{
           width: 36,
           height: 36,
-          borderRadius: 10,
+          borderRadius: 18,
           backgroundColor: colors.gold50,
           alignItems: 'center',
           justifyContent: 'center',
         }}
       >
-        <Bell size={16} color={colors.gold600} strokeWidth={1.8} />
+        <Feather name="bell" size={16} color={colors.gold600} />
       </View>
       <View style={{ flex: 1 }}>
         <Text style={{ fontSize: 14, color: colors.ink900, fontWeight: '500' }}>{item.name}</Text>
@@ -172,7 +172,7 @@ function WatchRow({ item, currentPrice, dayOpen, editing, onPress, onDelete }: R
             fontSize: 13,
             fontWeight: '600',
             color: triggered ? colors.red : colors.green,
-            fontFamily: 'Menlo',
+            fontVariant: ['tabular-nums'],
           }}
         >
           {tickValueDisplay}
@@ -202,10 +202,10 @@ function WatchRow({ item, currentPrice, dayOpen, editing, onPress, onDelete }: R
             padding: 8,
           }}
         >
-          <Trash2 size={16} color={colors.red} strokeWidth={1.8} />
+          <Feather name="trash-2" size={16} color={colors.red} />
         </TouchableOpacity>
       ) : (
-        <ChevronRight size={16} color={colors.ink500} strokeWidth={1.5} />
+        <Feather name="chevron-right" size={16} color={colors.ink500} />
       )}
     </TouchableOpacity>
   );
