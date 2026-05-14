@@ -1,6 +1,7 @@
 import type {
   AppSettings,
   FetcherStatus,
+  FloaterBaseline,
   NotifyPayload,
   PriceTick,
 } from '../../shared/types';
@@ -18,6 +19,15 @@ interface Api {
   };
   notify: {
     show(payload: NotifyPayload): Promise<void>;
+  };
+  floater: {
+    toggle(): Promise<boolean>;
+    show(): Promise<void>;
+    hide(): Promise<void>;
+    openMain(): Promise<void>;
+    publishBaseline(baseline: FloaterBaseline): Promise<void>;
+    getBaseline(): Promise<FloaterBaseline>;
+    onBaseline(cb: (baseline: FloaterBaseline) => void): () => void;
   };
 }
 

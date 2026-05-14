@@ -33,6 +33,20 @@ export default function SettingsCard() {
     setSettings(next);
   };
 
+  const toggleTray = async () => {
+    const next = await bridge().settings.set({
+      minimizeToTrayOnClose: !settings.minimizeToTrayOnClose,
+    });
+    setSettings(next);
+  };
+
+  const toggleFloater = async () => {
+    const next = await bridge().settings.set({
+      floaterEnabled: !settings.floaterEnabled,
+    });
+    setSettings(next);
+  };
+
   return (
     <div className="card-lg">
       <div className="text-sm text-ink-700 font-medium mb-4">盯盘设置</div>
@@ -65,6 +79,24 @@ export default function SettingsCard() {
           hint="开启后通知伴随提示音"
           checked={settings.notificationSound}
           onChange={toggleSound}
+        />
+      </div>
+
+      <div className="mt-3">
+        <Toggle
+          label="关闭时最小化到托盘"
+          hint="点击窗口关闭按钮时隐藏到状态栏,不退出应用"
+          checked={settings.minimizeToTrayOnClose}
+          onChange={toggleTray}
+        />
+      </div>
+
+      <div className="mt-3">
+        <Toggle
+          label="桌面悬浮窗"
+          hint="始终置顶的小窗口实时显示金价,可拖动到任意位置"
+          checked={settings.floaterEnabled}
+          onChange={toggleFloater}
         />
       </div>
     </div>

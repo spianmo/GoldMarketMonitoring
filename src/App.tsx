@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import TopBar from './components/TopBar';
@@ -20,6 +20,23 @@ export default function App() {
   const setStatus = useAppStore((s) => s.setStatus);
   const pushTick = useAppStore((s) => s.pushTick);
   const setWatches = useAppStore((s) => s.setWatches);
+  const dayOpenPrice = useAppStore((s) => s.dayOpenPrice);
+  const yesterdayClose = useAppStore((s) => s.yesterdayClose);
+  const lastBaselineRef = useRef<{ dayOpen: number | null; yesterdayClose: number | null }>({
+    dayOpen: null,
+    yesterdayClose: null,
+  });
+
+  useEffect(() => {
+    if (
+      lastBaselineRef.current.dayOpen === dayOpenPrice &&
+      lastBaselineRef.current.yesterdayClose === yesterdayClose
+    ) {
+      return;
+    }
+    lastBaselineRef.current = { dayOpen: dayOpenPrice, yesterdayClose };
+    void bridge().floater.publishBaseline({ dayOpen: dayOpenPrice, yesterdayClose });
+  }, [dayOpenPrice, yesterdayClose]);
 
   useEffect(() => {
     const api = bridge();

@@ -3,6 +3,13 @@ import { bridge } from '../ipc/bridge';
 import { useAppStore } from '../store/useAppStore';
 import { db } from '../db/dexie';
 import { resetAggregator } from '../utils/aggregator';
+import { FLOATER_SIZE_LABELS, type FloaterSize } from '../../shared/types';
+
+const FLOATER_SIZE_HINTS: Record<FloaterSize, string> = {
+  small: '208 × 60 · 价格 + 涨跌',
+  medium: '256 × 132 · 价格 + 涨跌 + 时间 + 来源',
+  large: '296 × 224 · 含流式折线图',
+};
 
 export default function Settings() {
   const settings = useAppStore((s) => s.settings);
@@ -83,6 +90,119 @@ export default function Settings() {
         </Row>
       </div>
 
+      <div className="card-lg space-y-4">
+        <div className="text-sm text-ink-700 font-medium">托盘行为</div>
+
+        <Row
+          label="关闭时最小化到托盘"
+          hint="点击窗口关闭按钮时隐藏到状态栏,从托盘菜单或图标可重新打开"
+        >
+          <SmallToggle
+            checked={settings.minimizeToTrayOnClose}
+            onChange={() => update({ minimizeToTrayOnClose: !settings.minimizeToTrayOnClose })}
+          />
+        </Row>
+
+        <Row
+          label="在 macOS 菜单栏显示金价"
+          hint="开启后状态栏图标右侧显示 ¥1,026.32 实时价格文本"
+        >
+          <SmallToggle
+            checked={settings.showPriceInTray}
+            onChange={() => update({ showPriceInTray: !settings.showPriceInTray })}
+          />
+        </Row>
+      </div>
+
+      <div className="card-lg space-y-4">
+        <div className="text-sm text-ink-700 font-medium">桌面悬浮窗</div>
+
+        <Row
+          label="启用悬浮窗"
+          hint="无边框小窗口常驻桌面顶层,显示实时金价、涨跌与时间"
+        >
+          <SmallToggle
+            checked={settings.floaterEnabled}
+            onChange={() => update({ floaterEnabled: !settings.floaterEnabled })}
+          />
+        </Row>
+
+        <Row
+          label="始终置顶"
+          hint="悬浮窗在所有应用上层显示,关闭后可作为普通窗口"
+        >
+          <SmallToggle
+            checked={settings.floaterAlwaysOnTop}
+            onChange={() => update({ floaterAlwaysOnTop: !settings.floaterAlwaysOnTop })}
+          />
+        </Row>
+
+        <Row
+          label="悬浮窗尺寸"
+          hint={FLOATER_SIZE_HINTS[settings.floaterSize]}
+        >
+          <div className="flex items-center gap-1 bg-ink-100/60 rounded-lg p-0.5">
+            {(['small', 'medium', 'large'] as FloaterSize[]).map((s) => {
+              const active = s === settings.floaterSize;
+              return (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => update({ floaterSize: s })}
+                  className={`text-xs px-3 py-1 rounded-md transition ${
+                    active
+                      ? 'bg-white text-gold-700 shadow-sm font-medium'
+                      : 'text-ink-500 hover:text-ink-700'
+                  }`}
+                >
+                  {FLOATER_SIZE_LABELS[s]}
+                </button>
+              );
+            })}
+          </div>
+        </Row>
+
+        <Row
+          label={`不透明度 ${Math.round(settings.floaterOpacity * 100)}%`}
+          hint="50% ~ 100%,过低可能影响识别"
+        >
+          <input
+            type="range"
+            min={0.5}
+            max={1}
+            step={0.05}
+            value={settings.floaterOpacity}
+            onChange={(e) => update({ floaterOpacity: Number(e.target.value) })}
+            className="w-40 accent-gold-500"
+          />
+        </Row>
+
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={() => bridge().floater.show()}
+            className="btn-ghost border border-ink-100"
+          >
+            立即显示
+          </button>
+          <button
+            type="button"
+            onClick={() => bridge().floater.hide()}
+            className="btn-ghost border border-ink-100"
+          >
+            立即隐藏
+          </button>
+          <button
+            type="button"
+            onClick={() => update({ floaterPosition: null })}
+            className="btn-ghost border border-ink-100"
+            title="将悬浮窗重置到屏幕右上角默认位置"
+          >
+            重置位置
+          </button>
+        </div>
+      </div>
+
       <div className="card-lg space-y-3">
         <div className="text-sm text-ink-700 font-medium">数据管理</div>
         <div className="flex gap-2">
@@ -136,5 +256,24 @@ function Row({
       </div>
       {children}
     </div>
+  );
+}
+
+function SmallToggle({ checked, onChange }: { checked: boolean; onChange: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onChange}
+      className={`relative h-6 w-11 rounded-full transition ${
+        checked ? 'bg-gold-500' : 'bg-ink-300'
+      }`}
+      aria-pressed={checked}
+    >
+      <span
+        className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition ${
+          checked ? 'left-[22px]' : 'left-0.5'
+        }`}
+      />
+    </button>
   );
 }

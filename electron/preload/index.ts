@@ -2,6 +2,7 @@ import { contextBridge, ipcRenderer } from 'electron';
 import type {
   AppSettings,
   FetcherStatus,
+  FloaterBaseline,
   NotifyPayload,
   PriceTick,
 } from '../../shared/types';
@@ -41,6 +42,29 @@ const api = {
   notify: {
     show(payload: NotifyPayload): Promise<void> {
       return ipcRenderer.invoke(IPC_CHANNELS.NOTIFY_SHOW, payload);
+    },
+  },
+  floater: {
+    toggle(): Promise<boolean> {
+      return ipcRenderer.invoke(IPC_CHANNELS.FLOATER_TOGGLE);
+    },
+    show(): Promise<void> {
+      return ipcRenderer.invoke(IPC_CHANNELS.FLOATER_SHOW);
+    },
+    hide(): Promise<void> {
+      return ipcRenderer.invoke(IPC_CHANNELS.FLOATER_HIDE);
+    },
+    openMain(): Promise<void> {
+      return ipcRenderer.invoke(IPC_CHANNELS.FLOATER_OPEN_MAIN);
+    },
+    publishBaseline(baseline: FloaterBaseline): Promise<void> {
+      return ipcRenderer.invoke(IPC_CHANNELS.FLOATER_PUBLISH_BASELINE, baseline);
+    },
+    getBaseline(): Promise<FloaterBaseline> {
+      return ipcRenderer.invoke(IPC_CHANNELS.FLOATER_GET_BASELINE);
+    },
+    onBaseline(listener: Listener<FloaterBaseline>) {
+      return on<FloaterBaseline>(IPC_CHANNELS.FLOATER_PUBLISH_BASELINE, listener);
     },
   },
 };

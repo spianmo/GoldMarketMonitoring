@@ -5,12 +5,16 @@ import path from 'node:path';
 export default defineConfig({
   plugins: [pluginReact()],
   source: {
-    entry: { index: './src/main.tsx' },
+    entry: {
+      index: './src/main.tsx',
+      floater: './src/floater.tsx',
+    },
     alias: { '@': path.resolve(__dirname, 'src') },
   },
   html: {
-    template: './src/index.html',
-    title: '黄金盯盘',
+    template: ({ entryName }) =>
+      entryName === 'floater' ? './src/floater.html' : './src/index.html',
+    title: ({ entryName }) => (entryName === 'floater' ? '黄金悬浮窗' : '黄金盯盘'),
   },
   output: {
     distPath: { root: 'dist/renderer' },

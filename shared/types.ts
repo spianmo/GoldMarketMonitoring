@@ -18,12 +18,39 @@ export interface FetcherStatus {
   intervalMs: number;
 }
 
+export interface FloaterPosition {
+  x: number;
+  y: number;
+}
+
+export type FloaterSize = 'small' | 'medium' | 'large';
+
+export const FLOATER_SIZE_DIMENSIONS: Record<FloaterSize, { width: number; height: number }> = {
+  small: { width: 208, height: 60 },
+  medium: { width: 256, height: 132 },
+  large: { width: 296, height: 224 },
+};
+
+export const FLOATER_SIZE_LABELS: Record<FloaterSize, string> = {
+  small: '小',
+  medium: '中',
+  large: '大',
+};
+
 export interface AppSettings {
   intervalMs: number;
   notificationEnabled: boolean;
   failoverThreshold: number;
   recoveryThreshold: number;
   notificationSound: boolean;
+  minimizeToTrayOnClose: boolean;
+  showPriceInTray: boolean;
+  floaterEnabled: boolean;
+  floaterPosition: FloaterPosition | null;
+  floaterOpacity: number;
+  floaterAlwaysOnTop: boolean;
+  floaterIgnoreMouseUntilHover: boolean;
+  floaterSize: FloaterSize;
 }
 
 export const DEFAULT_SETTINGS: AppSettings = {
@@ -32,7 +59,20 @@ export const DEFAULT_SETTINGS: AppSettings = {
   failoverThreshold: 3,
   recoveryThreshold: 5,
   notificationSound: false,
+  minimizeToTrayOnClose: true,
+  showPriceInTray: true,
+  floaterEnabled: false,
+  floaterPosition: null,
+  floaterOpacity: 0.95,
+  floaterAlwaysOnTop: true,
+  floaterIgnoreMouseUntilHover: false,
+  floaterSize: 'medium',
 };
+
+export interface FloaterBaseline {
+  dayOpen: number | null;
+  yesterdayClose: number | null;
+}
 
 export interface NotifyPayload {
   title: string;
@@ -80,4 +120,11 @@ export const IPC_CHANNELS = {
   NOTIFY_SHOW: 'notify:show',
   SETTINGS_GET: 'settings:get',
   SETTINGS_SET: 'settings:set',
+  FLOATER_TOGGLE: 'floater:toggle',
+  FLOATER_SHOW: 'floater:show',
+  FLOATER_HIDE: 'floater:hide',
+  FLOATER_OPEN_MAIN: 'floater:open-main',
+  FLOATER_PUBLISH_BASELINE: 'floater:publish-baseline',
+  FLOATER_GET_BASELINE: 'floater:get-baseline',
+  FLOATER_SAVE_BASELINE: 'floater:save-baseline',
 } as const;
