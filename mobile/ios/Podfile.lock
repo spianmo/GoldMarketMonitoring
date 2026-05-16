@@ -1,11 +1,7 @@
 PODS:
   - boost (1.84.0)
   - DoubleConversion (1.1.6)
-  - EXApplication (6.0.2):
-    - ExpoModulesCore
   - EXConstants (17.0.8):
-    - ExpoModulesCore
-  - EXNotifications (0.29.14):
     - ExpoModulesCore
   - Expo (52.0.49):
     - ExpoModulesCore
@@ -1847,9 +1843,7 @@ PODS:
 DEPENDENCIES:
   - "boost (from `../../node_modules/.pnpm/react-native@0.76.3_@babel+core@7.29.0_@babel+preset-env@7.29.5_@babel+core@7.29.0__@ty_eda936109ea289384bd071ae326a9289/node_modules/react-native/third-party-podspecs/boost.podspec`)"
   - "DoubleConversion (from `../../node_modules/.pnpm/react-native@0.76.3_@babel+core@7.29.0_@babel+preset-env@7.29.5_@babel+core@7.29.0__@ty_eda936109ea289384bd071ae326a9289/node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)"
-  - "EXApplication (from `../../node_modules/.pnpm/expo-application@6.0.2_expo@52.0.49_@babel+core@7.29.0_@babel+preset-env@7.29.5_@babel+_5a4f68a213af911b5923eb113e20bd3e/node_modules/expo-application/ios`)"
   - "EXConstants (from `../../node_modules/.pnpm/expo-constants@17.0.8_expo@52.0.49_@babel+core@7.29.0_@babel+preset-env@7.29.5_@babel+c_a260503e62b4e3607660a4de4cabe6f4/node_modules/expo-constants/ios`)"
-  - "EXNotifications (from `../../node_modules/.pnpm/expo-notifications@0.29.14_expo@52.0.49_@babel+core@7.29.0_@babel+preset-env@7.29.5_@ba_3b333a8a37acd95c9f2f4b1fccc594dd/node_modules/expo-notifications/ios`)"
   - "Expo (from `../../node_modules/.pnpm/expo@52.0.49_@babel+core@7.29.0_@babel+preset-env@7.29.5_@babel+core@7.29.0__@expo+metr_e719fb1863882fbbc11479112af7389f/node_modules/expo`)"
   - "ExpoAsset (from `../../node_modules/.pnpm/expo-asset@11.0.5_expo@52.0.49_@babel+core@7.29.0_@babel+preset-env@7.29.5_@babel+core@_a125d5717183f83de880a023f27c4eee/node_modules/expo-asset/ios`)"
   - "ExpoBackgroundFetch (from `../../node_modules/.pnpm/expo-background-fetch@13.0.6_expo@52.0.49_@babel+core@7.29.0_@babel+preset-env@7.29.5_@_1da14153fec4d0e86e6b19b14e70a7f9/node_modules/expo-background-fetch/ios`)"
@@ -1940,12 +1934,8 @@ EXTERNAL SOURCES:
     :podspec: "../../node_modules/.pnpm/react-native@0.76.3_@babel+core@7.29.0_@babel+preset-env@7.29.5_@babel+core@7.29.0__@ty_eda936109ea289384bd071ae326a9289/node_modules/react-native/third-party-podspecs/boost.podspec"
   DoubleConversion:
     :podspec: "../../node_modules/.pnpm/react-native@0.76.3_@babel+core@7.29.0_@babel+preset-env@7.29.5_@babel+core@7.29.0__@ty_eda936109ea289384bd071ae326a9289/node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
-  EXApplication:
-    :path: "../../node_modules/.pnpm/expo-application@6.0.2_expo@52.0.49_@babel+core@7.29.0_@babel+preset-env@7.29.5_@babel+_5a4f68a213af911b5923eb113e20bd3e/node_modules/expo-application/ios"
   EXConstants:
     :path: "../../node_modules/.pnpm/expo-constants@17.0.8_expo@52.0.49_@babel+core@7.29.0_@babel+preset-env@7.29.5_@babel+c_a260503e62b4e3607660a4de4cabe6f4/node_modules/expo-constants/ios"
-  EXNotifications:
-    :path: "../../node_modules/.pnpm/expo-notifications@0.29.14_expo@52.0.49_@babel+core@7.29.0_@babel+preset-env@7.29.5_@ba_3b333a8a37acd95c9f2f4b1fccc594dd/node_modules/expo-notifications/ios"
   Expo:
     :path: "../../node_modules/.pnpm/expo@52.0.49_@babel+core@7.29.0_@babel+preset-env@7.29.5_@babel+core@7.29.0__@expo+metr_e719fb1863882fbbc11479112af7389f/node_modules/expo"
   ExpoAsset:
@@ -2107,9 +2097,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   boost: 1dca942403ed9342f98334bf4c3621f011aa7946
   DoubleConversion: f16ae600a246532c4020132d54af21d0ddb2a385
-  EXApplication: 4c72f6017a14a65e338c5e74fca418f35141e819
   EXConstants: fcfc75800824ac2d5c592b5bc74130bad17b146b
-  EXNotifications: 9d3d17e52c95f377750d4a2ae553a716313dd4aa
   Expo: 4bb70893882e6382b41d1e910d7226c6a1b85f0a
   ExpoAsset: 48386d40d53a8c1738929b3ed509bcad595b5516
   ExpoBackgroundFetch: 72d9978cf6addacc6fb5e211ef99f74146a52d76

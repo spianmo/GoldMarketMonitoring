@@ -1,21 +1,71 @@
-import { Alert, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useState } from 'react';
+import { Alert, Linking, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import ToggleSwitch from '@/components/ToggleSwitch';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '@/theme/colors';
 import { useAppStore } from '@/store/useAppStore';
 import { setSettings as persistSettings, clearAll, clearHistoryOnly } from '@/services/storage';
 import { scheduler } from '@/services/scheduler';
-import type { AppSettings } from '@goldmarket/shared';
+import { isValidBarkUrl, pushToBark, type AppSettings } from '@goldmarket/shared';
+
+type BarkLevel = AppSettings['barkLevel'];
+const BARK_LEVEL_OPTIONS: { value: BarkLevel; label: string }[] = [
+  { value: 'active', label: '普通' },
+  { value: 'timeSensitive', label: '即时' },
+  { value: 'passive', label: '静默' },
+  { value: 'critical', label: '紧急' },
+];
 
 export default function SettingsScreen() {
   const insets = useSafeAreaInsets();
   const settings = useAppStore((s) => s.settings);
   const setSettings = useAppStore((s) => s.setSettings);
+  const [barkInput, setBarkInput] = useState(settings.barkUrl);
+  const [barkResult, setBarkResult] = useState<{ ok: boolean; message: string } | null>(null);
+  const [barkTesting, setBarkTesting] = useState(false);
 
   const update = (patch: Partial<AppSettings>) => {
     const next = persistSettings(patch);
     setSettings(next);
     if (patch.intervalMs != null) scheduler.setInterval(next.intervalMs);
+  };
+
+  const saveBarkUrl = () => {
+    const trimmed = barkInput.trim();
+    if (trimmed && !isValidBarkUrl(trimmed)) {
+      setBarkResult({ ok: false, message: 'URL 格式不合法,需如 https://api.day.app/<DeviceKey>/' });
+      return;
+    }
+    update({ barkUrl: trimmed });
+    setBarkResult({ ok: true, message: trimmed ? '已保存' : '已清空' });
+  };
+
+  const testBark = async () => {
+    const url = barkInput.trim() || settings.barkUrl;
+    if (!url) {
+      setBarkResult({ ok: false, message: '请先填写 Bark URL' });
+      return;
+    }
+    setBarkTesting(true);
+    setBarkResult(null);
+    try {
+      const r = await pushToBark(
+        { url },
+        {
+          title: '黄金盯盘 · 测试推送',
+          body: `这是一条来自手机端的测试消息 · ${new Date().toLocaleTimeString('zh-CN')}`,
+          level: settings.barkLevel,
+          sound: settings.barkSound || undefined,
+          group: '黄金盯盘',
+        },
+      );
+      setBarkResult({
+        ok: r.ok,
+        message: r.ok ? '推送成功,请查看 Bark App' : `失败:${r.message ?? `HTTP ${r.status}`}`,
+      });
+    } finally {
+      setBarkTesting(false);
+    }
   };
 
   return (
@@ -66,17 +116,189 @@ export default function SettingsScreen() {
             />
           </Row>
 
-          <Row label="系统通知" hint="条件触发时显示本地通知">
+          <View
+            style={{
+              backgroundColor: colors.gold50,
+              borderRadius: 8,
+              padding: 10,
+              borderWidth: 1,
+              borderColor: colors.gold200,
+            }}
+          >
+            <Text style={{ fontSize: 12, color: colors.gold700, lineHeight: 18 }}>
+              ⓘ 本机已不申请本地通知权限。条件触发后,通过下方「远程推送 (Bark)」推送到 iOS。
+            </Text>
+          </View>
+        </View>
+
+        <View
+          style={{
+            backgroundColor: colors.card,
+            borderRadius: 14,
+            padding: 18,
+            marginBottom: 14,
+          }}
+        >
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: 8,
+            }}
+          >
+            <Text style={{ fontSize: 15, fontWeight: '600', color: colors.ink900 }}>
+              远程推送 (Bark)
+            </Text>
+            <TouchableOpacity
+              onPress={() => Linking.openURL('https://bark.day.app/')}
+            >
+              <Text style={{ fontSize: 12, color: colors.gold600 }}>获取 Bark App ↗</Text>
+            </TouchableOpacity>
+          </View>
+
+          <Row
+            label="启用 Bark 推送"
+            hint="条件触发时,通过 Bark 推送到手机(可跨设备)"
+          >
             <ToggleSwitch
-              value={settings.notificationEnabled}
-              onValueChange={(v) => update({ notificationEnabled: v })}
+              value={settings.barkEnabled}
+              onValueChange={(v) => update({ barkEnabled: v })}
             />
           </Row>
 
-          <Row label="通知声音" hint="通知伴随提示音">
-            <ToggleSwitch
-              value={settings.notificationSound}
-              onValueChange={(v) => update({ notificationSound: v })}
+          <View style={{ marginTop: 12, marginBottom: 6 }}>
+            <Text style={{ fontSize: 12, color: colors.ink500, marginBottom: 6 }}>
+              推送地址(完整 URL)
+            </Text>
+            <TextInput
+              value={barkInput}
+              onChangeText={(t) => {
+                setBarkInput(t);
+                setBarkResult(null);
+              }}
+              placeholder="https://api.day.app/<DeviceKey>/"
+              placeholderTextColor={colors.ink500}
+              autoCapitalize="none"
+              autoCorrect={false}
+              keyboardType="url"
+              style={{
+                backgroundColor: colors.gold50,
+                borderWidth: 1,
+                borderColor: colors.gold200,
+                borderRadius: 10,
+                paddingHorizontal: 12,
+                paddingVertical: 10,
+                fontSize: 13,
+                color: colors.ink900,
+                fontVariant: ['tabular-nums'],
+              }}
+            />
+            <View style={{ flexDirection: 'row', gap: 8, marginTop: 8 }}>
+              <TouchableOpacity
+                onPress={saveBarkUrl}
+                style={{
+                  flex: 1,
+                  backgroundColor: colors.gold500,
+                  paddingVertical: 10,
+                  borderRadius: 8,
+                  alignItems: 'center',
+                }}
+              >
+                <Text style={{ color: colors.white, fontSize: 13, fontWeight: '600' }}>
+                  保存
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                disabled={barkTesting}
+                onPress={testBark}
+                style={{
+                  flex: 1,
+                  borderWidth: 1,
+                  borderColor: colors.ink100,
+                  paddingVertical: 10,
+                  borderRadius: 8,
+                  alignItems: 'center',
+                  opacity: barkTesting ? 0.6 : 1,
+                }}
+              >
+                <Text style={{ color: colors.ink700, fontSize: 13 }}>
+                  {barkTesting ? '推送中…' : '发送测试'}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            {barkResult && (
+              <Text
+                style={{
+                  fontSize: 12,
+                  marginTop: 8,
+                  color: barkResult.ok ? colors.green : colors.red,
+                }}
+              >
+                {barkResult.message}
+              </Text>
+            )}
+            <Text style={{ fontSize: 11, color: colors.ink500, marginTop: 6, lineHeight: 17 }}>
+              从 Bark App 中复制完整 URL,例如 https://api.day.app/rYc7etuCgSdknHRWvnMtGV/。支持自建服务器。
+            </Text>
+          </View>
+
+          <Row label="通知级别" hint="critical 可穿透静音,需在 Bark App 内授权">
+            <View
+              style={{
+                flexDirection: 'row',
+                backgroundColor: colors.ink100,
+                borderRadius: 8,
+                padding: 2,
+              }}
+            >
+              {BARK_LEVEL_OPTIONS.map((opt) => {
+                const active = opt.value === settings.barkLevel;
+                return (
+                  <TouchableOpacity
+                    key={opt.value}
+                    onPress={() => update({ barkLevel: opt.value })}
+                    style={{
+                      paddingHorizontal: 10,
+                      paddingVertical: 5,
+                      borderRadius: 6,
+                      backgroundColor: active ? colors.white : 'transparent',
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 11,
+                        color: active ? colors.gold700 : colors.ink500,
+                        fontWeight: active ? '600' : '400',
+                      }}
+                    >
+                      {opt.label}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          </Row>
+
+          <Row label="自定义铃声" hint="Bark App 内置铃声名,留空使用默认">
+            <TextInput
+              value={settings.barkSound}
+              onChangeText={(t) => update({ barkSound: t })}
+              placeholder="例如 bell"
+              placeholderTextColor={colors.ink500}
+              autoCapitalize="none"
+              autoCorrect={false}
+              style={{
+                width: 130,
+                backgroundColor: colors.gold50,
+                borderWidth: 1,
+                borderColor: colors.gold200,
+                borderRadius: 8,
+                paddingHorizontal: 10,
+                paddingVertical: 6,
+                fontSize: 13,
+                color: colors.ink900,
+              }}
             />
           </Row>
         </View>

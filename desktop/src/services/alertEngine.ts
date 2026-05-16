@@ -1,6 +1,6 @@
 import { bridge } from '../ipc/bridge';
 import { insertAlert, listWatches, updateWatch } from '../db/repos';
-import { alertMessage, describeCondition, evaluate } from '@goldmarket/shared';
+import { alertMessage, describeCondition, evaluate, pushToBark } from '@goldmarket/shared';
 import { useAppStore } from '../store/useAppStore';
 import type { PriceTick, WatchItem } from '@goldmarket/shared';
 
@@ -39,11 +39,29 @@ export async function evaluateOnTick(tick: PriceTick) {
     };
     await updateWatch(w.id!, patch);
 
+    const title = `黄金价格提醒 · ${w.name}`;
+    const body = `${msg}\n触发条件: ${describeCondition(w)}`;
+
     if (settings.notificationEnabled) {
       void bridge().notify.show({
-        title: `黄金价格提醒 · ${w.name}`,
-        body: `${msg}\n触发条件: ${describeCondition(w)}`,
+        title,
+        body,
         silent: !settings.notificationSound,
+      });
+    }
+
+    if (settings.barkEnabled && settings.barkUrl) {
+      void pushToBark(
+        { url: settings.barkUrl },
+        {
+          title,
+          body,
+          level: settings.barkLevel,
+          sound: settings.barkSound || undefined,
+          group: '黄金盯盘',
+        },
+      ).then((r) => {
+        if (!r.ok) console.warn('[bark] push failed:', r.message);
       });
     }
   }

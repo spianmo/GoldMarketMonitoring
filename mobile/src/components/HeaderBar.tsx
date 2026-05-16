@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Text, TouchableOpacity, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useAppStore } from '@/store/useAppStore';
@@ -47,7 +47,19 @@ export default function HeaderBar() {
           </Text>
           <Text style={{ fontSize: 22 }}>🥇</Text>
         </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8, gap: 6 }}>
+        <TouchableOpacity
+          activeOpacity={isError ? 0.6 : 1}
+          disabled={!isError}
+          onPress={() => {
+            if (!isError) return;
+            Alert.alert(
+              '抓取异常详情',
+              status?.lastError ?? '未知错误',
+              [{ text: '我知道了', style: 'cancel' }],
+            );
+          }}
+          style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8, gap: 6 }}
+        >
           <View
             style={{
               width: 8,
@@ -57,8 +69,9 @@ export default function HeaderBar() {
             }}
           />
           <Text style={{ fontSize: 12, color: colors.ink700, fontWeight: '500' }}>{statusText}</Text>
+          {isError && <Text style={{ fontSize: 11, color: colors.ink500 }}>(点击查看)</Text>}
           <Text style={{ fontSize: 12, color: colors.ink500, marginLeft: 4 }}>{timeText}</Text>
-        </View>
+        </TouchableOpacity>
       </View>
       <View style={{ flexDirection: 'row', gap: 8 }}>
         <RoundButton onPress={() => router.push('/(tabs)/history')}>

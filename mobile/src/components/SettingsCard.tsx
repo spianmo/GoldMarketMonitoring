@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Modal, Pressable, Text, TouchableOpacity, View } from 'react-native';
-import ToggleSwitch from './ToggleSwitch';
 import { Feather } from '@expo/vector-icons';
 import { useAppStore } from '@/store/useAppStore';
 import { colors } from '@/theme/colors';
@@ -65,20 +64,40 @@ export default function SettingsCard() {
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
-          paddingVertical: 8,
+          paddingVertical: 10,
           marginTop: 4,
+          borderTopWidth: 1,
+          borderTopColor: colors.ink100,
         }}
       >
-        <View>
-          <Text style={{ fontSize: 14, color: colors.ink900 }}>系统通知</Text>
+        <View style={{ flex: 1, paddingRight: 12 }}>
+          <Text style={{ fontSize: 14, color: colors.ink900 }}>Bark 推送</Text>
           <Text style={{ fontSize: 11, color: colors.ink500, marginTop: 2 }}>
-            条件触发时显示系统通知
+            {settings.barkEnabled && settings.barkUrl
+              ? '已启用 · 条件触发时推送到 Bark'
+              : '未配置 · 前往设置填写推送地址'}
           </Text>
         </View>
-        <ToggleSwitch
-          value={settings.notificationEnabled}
-          onValueChange={(v) => update({ notificationEnabled: v })}
-        />
+        <View
+          style={{
+            paddingHorizontal: 8,
+            paddingVertical: 3,
+            borderRadius: 6,
+            backgroundColor:
+              settings.barkEnabled && settings.barkUrl ? colors.gold100 : colors.ink100,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 11,
+              fontWeight: '500',
+              color:
+                settings.barkEnabled && settings.barkUrl ? colors.gold700 : colors.ink500,
+            }}
+          >
+            {settings.barkEnabled && settings.barkUrl ? '已启用' : '未启用'}
+          </Text>
+        </View>
       </View>
 
       <Modal

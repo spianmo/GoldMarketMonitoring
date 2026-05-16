@@ -51,6 +51,10 @@ export interface AppSettings {
   floaterAlwaysOnTop: boolean;
   floaterIgnoreMouseUntilHover: boolean;
   floaterSize: FloaterSize;
+  barkEnabled: boolean;
+  barkUrl: string;
+  barkLevel: 'active' | 'timeSensitive' | 'passive' | 'critical';
+  barkSound: string;
 }
 
 export const DEFAULT_SETTINGS: AppSettings = {
@@ -67,6 +71,10 @@ export const DEFAULT_SETTINGS: AppSettings = {
   floaterAlwaysOnTop: true,
   floaterIgnoreMouseUntilHover: false,
   floaterSize: 'medium',
+  barkEnabled: false,
+  barkUrl: '',
+  barkLevel: 'active',
+  barkSound: '',
 };
 
 export interface FloaterBaseline {

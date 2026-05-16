@@ -12,7 +12,19 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.teamhelper.goldmarketmonitoring",
       "infoPlist": {
-        "UIBackgroundModes": ["fetch"]
+        "UIBackgroundModes": ["fetch"],
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": false,
+          "NSAllowsLocalNetworking": true,
+          "NSExceptionDomains": {
+            "czbank.com": {
+              "NSIncludesSubdomains": true,
+              "NSExceptionMinimumTLSVersion": "TLSv1.2",
+              "NSExceptionRequiresForwardSecrecy": true,
+              "NSExceptionAllowsInsecureHTTPLoads": false
+            }
+          }
+        }
       }
     },
     "android": {
@@ -21,21 +33,13 @@
         "backgroundColor": "#FAF8F3"
       },
       "package": "com.teamhelper.goldmarketmonitoring",
-      "permissions": ["INTERNET", "POST_NOTIFICATIONS"]
+      "permissions": ["INTERNET"]
     },
     "web": {
       "bundler": "metro",
       "output": "static"
     },
-    "plugins": [
-      "expo-router",
-      [
-        "expo-notifications",
-        {
-          "color": "#E0A82E"
-        }
-      ]
-    ],
+    "plugins": ["expo-router"],
     "experiments": {
       "typedRoutes": true
     }
